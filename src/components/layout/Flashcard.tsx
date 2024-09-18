@@ -3,7 +3,12 @@ import { useFlashcardState } from "@/hooks/stores";
 import { fetchAPI } from "@/utils/fetchAPI";
 import { Kotoba } from "@/utils/types";
 import { useQuery } from "@tanstack/react-query";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useMotionValueEvent,
+  useTransform,
+} from "framer-motion";
 import React from "react";
 
 interface FlashcardProps {
@@ -25,7 +30,7 @@ const Flashcard = ({}: FlashcardProps) => {
 
   return (
     <motion.section>
-      <motion.div className="w-screen max-w-sm relative">
+      <motion.div className="w-screen max-w-sm relative ">
         {isLoading ? (
           <div className="w-full aspect-video flex items-center justify-center bg-blue-500 rounded-lg">
             Loading...
@@ -55,14 +60,14 @@ interface CardProps {
 const Card = ({ data, refetch, isLoading }: CardProps) => {
   const { addForget, addRemember } = useFlashcardState();
   const handleDragEnd = () => {
-    if (x.get() < -75 || x.get() > 75) {
+    if (x.get() < -50 || x.get() > 75) {
       refetch();
     }
-    if (x.get() < -75) {
+    if (x.get() < -50) {
       addForget(data.word);
     }
 
-    if (x.get() > 75) {
+    if (x.get() > 50) {
       addRemember(data.word);
     }
   };
@@ -70,10 +75,14 @@ const Card = ({ data, refetch, isLoading }: CardProps) => {
   const x = useMotionValue(0);
   const background = useTransform(
     x,
-    [-150, 0, 150],
+    [-50, 0, 50],
     ["#E34234", "rgb(59 130 246)", "#32CD32"]
   );
-  const rotateZ = useTransform(x, [-150, 0, 150], [-15, 0, 15]);
+  const rotateZ = useTransform(x, [-50, 0, 50], [-15, 0, 15]);
+
+  useMotionValueEvent(x, "change", (latest) => {
+    console.log(latest);
+  });
 
   return (
     <div className="relative">

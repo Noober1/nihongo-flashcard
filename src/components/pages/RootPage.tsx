@@ -29,7 +29,7 @@ const RootPage = () => {
   }
 
   return (
-    <motion.main className="w-full h-screen dark:bg-slate-800 flex items-center justify-center">
+    <motion.main className="w-full h-screen dark:bg-slate-800 flex items-center justify-center overflow-hidden">
       {isFetched && (
         <>
           {error401 ? (

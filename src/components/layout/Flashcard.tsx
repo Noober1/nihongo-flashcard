@@ -60,15 +60,14 @@ interface CardProps {
 const Card = ({ data, refetch, isLoading }: CardProps) => {
   const { addForget, addRemember } = useFlashcardState();
   const handleDragEnd = () => {
-    if (x.get() < -50 || x.get() > 75) {
-      refetch();
-    }
     if (x.get() < -50) {
       addForget(data.word);
+      refetch();
     }
 
     if (x.get() > 50) {
       addRemember(data.word);
+      refetch();
     }
   };
 

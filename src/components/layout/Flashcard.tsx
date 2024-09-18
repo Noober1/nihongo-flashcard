@@ -36,7 +36,7 @@ const Flashcard = ({}: FlashcardProps) => {
               <span>Forgot: {forgotWords.length}</span>
               <span>Remember: {rememberWords.length}</span>
             </div>
-            <Card data={data.data} refetch={refetch} />
+            <Card isLoading={isLoading} data={data.data} refetch={refetch} />
           </div>
         ) : (
           "No data"
@@ -49,19 +49,20 @@ const Flashcard = ({}: FlashcardProps) => {
 interface CardProps {
   data: Kotoba;
   refetch: () => void;
+  isLoading: boolean;
 }
 
-const Card = ({ data, refetch }: CardProps) => {
+const Card = ({ data, refetch, isLoading }: CardProps) => {
   const { addForget, addRemember } = useFlashcardState();
   const handleDragEnd = () => {
     if (x.get() < -75 || x.get() > 75) {
       refetch();
     }
-    if (x.get() < -300) {
+    if (x.get() < -75) {
       addForget(data.word);
     }
 
-    if (x.get() > 300) {
+    if (x.get() > 75) {
       addRemember(data.word);
     }
   };
@@ -84,7 +85,7 @@ const Card = ({ data, refetch }: CardProps) => {
         <p className="text-lg first-letter:uppercase">{data.meaning}</p>
       </motion.div>
       <motion.div
-        drag
+        drag={!isLoading}
         style={{ x, background, rotateZ }}
         dragDirectionLock
         onDragEnd={handleDragEnd}
@@ -101,7 +102,7 @@ const Card = ({ data, refetch }: CardProps) => {
         dragElastic={0.3}
         className="w-full z-10 absolute top-0 left-0 aspect-video text-white bg-green-500 flex items-center justify-center text-2xl font-bold rounded-lg cursor-grab"
       >
-        {data.word}
+        {isLoading ? "Loading..." : data.word}
       </motion.div>
     </div>
   );

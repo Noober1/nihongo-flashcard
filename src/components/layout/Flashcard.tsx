@@ -16,7 +16,11 @@ interface FlashcardProps {
 }
 
 const Flashcard = ({}: FlashcardProps) => {
-  const { forget: forgotWords, remember: rememberWords } = useFlashcardState();
+  const {
+    forget: forgotWords,
+    remember: rememberWords,
+    reset,
+  } = useFlashcardState();
 
   const { isLoading, data, refetch } = useQuery({
     queryKey: ["flashcard"],
@@ -37,8 +41,16 @@ const Flashcard = ({}: FlashcardProps) => {
           </div>
         ) : data ? (
           <div>
-            <div className="flex justify-between mb-5 p-2 bg-blue-500 rounded">
+            <div className="grid grid-cols-3 mb-5 p-2 bg-blue-500 rounded text-center">
               <span>Forgot: {forgotWords.length}</span>
+              <span>
+                <button
+                  onClick={reset}
+                  className="bg-gray-500 p-1 px-2 rounded text-white"
+                >
+                  Reset
+                </button>
+              </span>
               <span>Remember: {rememberWords.length}</span>
             </div>
             <Card isLoading={isLoading} data={data.data} refetch={refetch} />

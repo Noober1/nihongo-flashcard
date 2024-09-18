@@ -3,12 +3,7 @@ import { useFlashcardState } from "@/hooks/stores";
 import { fetchAPI } from "@/utils/fetchAPI";
 import { Kotoba } from "@/utils/types";
 import { useQuery } from "@tanstack/react-query";
-import {
-  DragHandlers,
-  motion,
-  useMotionValue,
-  useTransform,
-} from "framer-motion";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 import React from "react";
 
 interface FlashcardProps {
@@ -58,15 +53,15 @@ interface CardProps {
 
 const Card = ({ data, refetch }: CardProps) => {
   const { addForget, addRemember } = useFlashcardState();
-  const handleDragEnd: DragHandlers["onDragEnd"] = (event, info) => {
+  const handleDragEnd = () => {
     if (x.get() < -75 || x.get() > 75) {
       refetch();
     }
-    if (info.offset.x < -300) {
+    if (x.get() < -300) {
       addForget(data.word);
     }
 
-    if (info.offset.x > 300) {
+    if (x.get() > 300) {
       addRemember(data.word);
     }
   };
